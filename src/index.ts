@@ -2,6 +2,7 @@ import { addEventListener, createRange, getCopyText, getPosition, updateText } f
 import type { Disposable, ExtensionContext } from 'vscode'
 import { trim } from 'lazy-js-utils'
 
+// bug: 修复回车的时候也会触发，将换行给取消的问题
 export async function activate(context: ExtensionContext) {
   const disposes: Disposable[] = []
 
