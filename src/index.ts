@@ -1,4 +1,4 @@
-import { addEventListener, createRange, getCopyText, getPosition, updateText } from '@vscode-use/utils'
+import { addEventListener, createRange, getCopyText, getLineText, getPosition, updateText } from '@vscode-use/utils'
 import type { Disposable, ExtensionContext } from 'vscode'
 import { trim } from 'lazy-js-utils'
 
@@ -10,7 +10,7 @@ export async function activate(context: ExtensionContext) {
     if (contentChanges.length === 1) {
       const change = contentChanges[0]
       const text = change.text
-      if (!text.trim())
+      if (!text.trim() || text.trim() === getLineText(change.range.start.line)?.trim())
         return
       const range = change.range
       const copyText = await getCopyText()
