@@ -10,7 +10,14 @@ export async function activate(context: ExtensionContext) {
     if (contentChanges.length === 1) {
       const change = contentChanges[0]
       const text = change.text
-      if (!text.trim() || text.trim() === getLineText(change.range.start.line)?.trim())
+      let lineText: string = ''
+      try {
+        lineText = getLineText(change.range.start.line)?.trim() || ''
+      }
+      catch (error) {
+
+      }
+      if (!text.trim() || text.trim() === lineText)
         return
       const range = change.range
       const copyText = await getCopyText()
