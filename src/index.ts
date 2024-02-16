@@ -12,7 +12,7 @@ export async function activate(context: ExtensionContext) {
       const text = change.text
       let lineText: string = ''
       try {
-        lineText = getLineText(change.range.start.line)?.trim() || ''
+        lineText = getLineText(change.range.start.line) || ''
       }
       catch (error) {
 
