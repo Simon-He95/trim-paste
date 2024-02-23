@@ -6,6 +6,9 @@ export async function activate() {
   timer = setInterval(async () => {
     const copyText = await getCopyText()
     const trimEndCopyText = trim(copyText, 'post')
+    // 如果是纯空格则不处理
+    if (!trimEndCopyText)
+      return
     const selection = getSelection()
     if (selection) {
       const lineText = getLineText(selection.line)
