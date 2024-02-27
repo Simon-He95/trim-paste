@@ -5,6 +5,8 @@ let timer: any = null
 export async function activate() {
   timer = setInterval(async () => {
     const copyText = await getCopyText()
+    if (!copyText)
+      return
     const trimEndCopyText = trim(copyText, 'post')
     // 如果是纯空格则不处理
     if (!trimEndCopyText)
