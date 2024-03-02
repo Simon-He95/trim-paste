@@ -3,23 +3,30 @@ import { trim } from 'lazy-js-utils'
 
 let timer: any = null
 export async function activate() {
+  let isWorking = false
   timer = setInterval(async () => {
+    if (isWorking)
+      return
+    isWorking = true
     const copyText = await getCopyText()
     if (!copyText)
-      return
+      return isWorking = false
     const trimEndCopyText = trim(copyText, 'post')
     // 如果是纯空格则不处理
     if (!trimEndCopyText)
-      return
+      return isWorking = false
     const selection = getSelection()
     if (selection) {
       const lineText = getLineText(selection.line)
-      if (lineText === trimEndCopyText)
-        return
+      if (lineText) {
+        const trimLineText = trim(lineText, 'post')
+        if (trimLineText === trimEndCopyText)
+          return isWorking = false
+      }
     }
     if (trimEndCopyText === copyText)
-      return
-    setCopyText(trimEndCopyText)
+      return isWorking = false
+    setCopyText(trimEndCopyText).then(() => isWorking = false)
   }, 60)
 }
 
