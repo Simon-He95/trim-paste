@@ -1,10 +1,10 @@
-import { getCopyText, getLineText, getSelection, setCopyText } from '@vscode-use/utils'
+import { addEventListener, getCopyText, getLineText, getSelection, nextTick, setCopyText } from '@vscode-use/utils'
 import { trim } from 'lazy-js-utils'
 
 let timer: any = null
 export async function activate() {
   let isWorking = false
-  timer = setInterval(async () => {
+  const run = () => timer = setInterval(async () => {
     if (isWorking)
       return
     isWorking = true
@@ -27,7 +27,14 @@ export async function activate() {
     if (trimEndCopyText === copyText)
       return isWorking = false
     setCopyText(trimEndCopyText).then(() => isWorking = false)
-  }, 60)
+  }, 800)
+  addEventListener('activeText-change', () => {
+    isWorking = false
+    clearInterval(timer)
+    nextTick(run)
+  })
+
+  run()
 }
 
 export function deactivate() {
