@@ -1,8 +1,9 @@
 import { addEventListener, getCopyText, getLineText, getSelection, nextTick, setCopyText } from '@vscode-use/utils'
 import { trim } from 'lazy-js-utils'
+import type { ExtensionContext } from 'vscode'
 
 let timer: any = null
-export async function activate() {
+export async function activate(context: ExtensionContext) {
   let isWorking = false
   const run = () => timer = setInterval(async () => {
     if (isWorking)
@@ -28,11 +29,11 @@ export async function activate() {
       return isWorking = false
     setCopyText(trimEndCopyText).then(() => isWorking = false)
   }, 800)
-  addEventListener('activeText-change', () => {
+  context.subscriptions.push(addEventListener('activeText-change', () => {
     isWorking = false
     clearInterval(timer)
     nextTick(run)
-  })
+  }))
 
   run()
 }
