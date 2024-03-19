@@ -17,17 +17,18 @@ export async function activate(context: ExtensionContext) {
     if (!trimEndCopyText)
       return isWorking = false
     const selection = getSelection()
-    if (selection) {
-      const lineText = getLineText(selection.line)
-      if (lineText) {
-        const trimLineText = trim(lineText, 'post')
-        if (trimLineText === trimEndCopyText)
-          return isWorking = false
-      }
+    if (!selection)
+      return
+    const lineText = getLineText(selection.line)
+    if (lineText) {
+      const trimLineText = trim(lineText, 'post')
+      if (trimLineText === trimEndCopyText)
+        return isWorking = false
     }
     if (trimEndCopyText === copyText)
       return isWorking = false
-    setCopyText(trimEndCopyText).then(() => isWorking = false)
+    const needNewline = copyText.endsWith('\n')
+    setCopyText(needNewline ? `${trimEndCopyText}\n` : trimEndCopyText).then(() => isWorking = false)
   }, 800)
   context.subscriptions.push(addEventListener('activeText-change', () => {
     isWorking = false
