@@ -1,4 +1,4 @@
-import { addEventListener, getCopyText, getLineText, getSelection, nextTick, setCopyText } from '@vscode-use/utils'
+import { addEventListener, getActiveText, getCopyText, getLineText, getSelection, nextTick, setCopyText } from '@vscode-use/utils'
 import { trim } from 'lazy-js-utils'
 import type { ExtensionContext } from 'vscode'
 
@@ -27,7 +27,8 @@ export async function activate(context: ExtensionContext) {
     }
     if (trimEndCopyText === copyText)
       return isWorking = false
-    const needNewline = copyText.endsWith('\n')
+    const code = getActiveText()
+    const needNewline = code ? code.includes(copyText) : false
     setCopyText(needNewline ? `${trimEndCopyText}\n` : trimEndCopyText).then(() => isWorking = false)
   }, 800)
   context.subscriptions.push(addEventListener('activeText-change', () => {
