@@ -1,6 +1,5 @@
 import { addEventListener, getActiveText, getCopyText, getLineText, getSelection, nextTick, setCopyText, createExtension } from '@vscode-use/utils'
 import { trim } from 'lazy-js-utils'
-import type { ExtensionContext } from 'vscode'
 
 let timer: any = null
 
